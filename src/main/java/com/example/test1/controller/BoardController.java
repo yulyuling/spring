@@ -89,4 +89,15 @@ public class BoardController {
 		return new Gson().toJson(resultMap); //map을 json형태로 바꿔주는 함수다
 		//return new Gson().toJson(resultMap);
 	}
+	//게시글 삭제
+	@RequestMapping(value = "/board/remove.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String boardRemove(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap = boardService.boardRemove(map);
+		return new Gson().toJson(resultMap); //map을 json형태로 바꿔주는 함수다
+	}
+
 }

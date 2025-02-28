@@ -19,7 +19,11 @@ public interface BoardMapper {
 	Board selectBoard(HashMap<String, Object> map);
 	//딱 한개만 넘겨줄거라서 Board. 
 
-	Board updateBoard(HashMap<String, Object> map);
+	void updateBoard(HashMap<String, Object> map);
 
+	void updateCnt(HashMap<String, Object> map); //조회수 올릴겨
+
+	void deleteBoard(HashMap<String, Object> map);
+	
 
 }

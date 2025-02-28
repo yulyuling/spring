@@ -19,18 +19,27 @@
 <body>
 	<div id="app">
 		<div>
+            <div>
+                <select v-model="searchOption">
+                    <option value="all"> ::전체:: </option>
+                    <option value="title"> 제목 </option>
+                    <option value="name"> 작성자 </option>
+                </select>
+                <input v-model="keyword" @keyup.enter="fnBoardList" placeholder="검색어">
+                <button @click="fnBoardList">검색</button>
+            </div>
             <table v-model="">
                 <tr>
                     <th>번호</th>
                     <th>제목</th>
-                    <th>아이디</th>
+                    <th>작성자</th>
                     <th>조회수</th>
                     <th>작성일</th>
                 </tr>
                 <tr v-for="item in list">
                     <td>{{item.boardNo}}</td>
                     <td><a href="javascript:;" @click="fnView(item.boardNo)">{{item.title}}</a></td>
-                    <td>{{item.userId}}</td>
+                    <td>{{item.userName}}</td>
                     <td>{{item.cnt}}</td>
                     <td>{{item.cDateTime}}</td>
                 </tr>
@@ -46,6 +55,9 @@
             return {
                 list : [],
                 userId:"",
+                userName: "",
+                keyword: "",
+                searchOption: "all",
             
             };
         },
@@ -53,7 +65,9 @@
             fnBoardList(){
 				var self = this;
 				var nparmap = {
-                    userId : self.userId
+                    userId : self.userId,
+                    keyword : self.keyword,
+                    searchOption : self.searchOption
                 };
 				$.ajax({
 					url:"/board/list.dox",
@@ -63,6 +77,7 @@
 					success : function(data) { 
 						console.log(data);
                         self.list = data.list;
+
 					}
 				});
             },

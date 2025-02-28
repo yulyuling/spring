@@ -5,7 +5,14 @@ public class Member {
 	private String userId;
 	private String userName;
 	private String address;
+	private String status;
 	
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	public String getUserId() {
 		return userId;
 	}

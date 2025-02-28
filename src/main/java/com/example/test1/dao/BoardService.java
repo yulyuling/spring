@@ -11,6 +11,7 @@ import com.example.test1.model.Board;
 
 @Service
 public class BoardService {
+	
 	@Autowired
 	BoardMapper boardMapper;
 
@@ -47,7 +48,15 @@ public class BoardService {
 	public HashMap<String, Object> getBoard(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		if(map.get("option").equals("View")) {
+//		if(map.containsKey("option")) { //얘는 한쪽만 옵션을 처리해서 얘만 불러온다.
+										//위에처럼하면 너무 코드가 길어짐
+			boardMapper.updateCnt(map);
+		}
+		
 		Board info = boardMapper.selectBoard(map);
+		
 		resultMap.put("info", info);
 		resultMap.put("result", "success");
 		return resultMap;
@@ -61,6 +70,13 @@ public class BoardService {
 		
 		return resultMap;
 	}
-	
+
+	public HashMap<String, Object> boardRemove(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		boardMapper.deleteBoard(map);
+		resultMap.put("result", "success");
+		return resultMap;
+	}
 
 }

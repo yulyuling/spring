@@ -5,13 +5,25 @@
 <mapper namespace="com.example.test1.mapper.BoardMapper">
 	
 	<select id="selectBoardList" parameterType="hashmap" resultType="com.example.test1.model.Board">
-		SELECT BOARDNO, TITLE, CNT, USERID, CDATETIME
-		FROM BOARD
+		SELECT *
+		FROM BOARD B
+		INNER JOIN MEMBER M ON B.USERID = M.USERID
+		WHERE 1=1
+		<if test="searchOption != null and searchOption == 'all'">
+			AND (TITLE LIKE '%' || #{keyword} || '%'
+				OR USERNAME LIKE '%' || #{keyword} || '%')
+		</if>
+		<if test="searchOption != null and searchOption == 'title'">
+			AND TITLE LIKE '%' || #{keyword} || '%'
+		</if>
+			<if test="searchOption != null and searchOption == 'name'">
+			AND USERNAME LIKE '%' || #{keyword} || '%'
+		</if>
 	</select>
 	
 	<insert id="insertBoard" parameterType="hashmap">
 		INSERT INTO BOARD(BOARDNO, TITLE, CONTENTS, USERID, CNT, CDATETIME, UDATETIME)
-		VALUES(BOARD_SEQ.NEXTVAL, #{title}, #{contents}, 'user01', 0, SYSDATE, SYSDATE)
+		VALUES(BOARD_SEQ.NEXTVAL, #{title}, #{contents}, #{userId}, 0, SYSDATE, SYSDATE)
 	</insert>
 	
 	<select id="selectBoard" parameterType="hashmap" resultType="com.example.test1.model.Board">
@@ -20,7 +32,25 @@
 		FROM BOARD
 		WHERE BOARDNO = #{boardNo}
 	</select>
+	<update id="updateBoard" parameterType="hashmap">
+		UPDATE BOARD
+    	SET
+        TITLE = #{title},
+        CONTENTS = #{contents}
+		WHERE BOARDNO = #{boardNo}
+	</update>
 	
+	<update id="updateCnt" parameterType="hashmap">
+		UPDATE BOARD
+		SET
+			CNT = CNT + 1
+		WHERE BOARDNO = #{boardNo}
+	</update>
+	
+	<delete id="deleteBoard" parameterType="hashmap">
+		DELETE FROM BOARD
+		WHERE BOARDNO = #{boardNo}
+	</delete>
 
 </mapper>
 
