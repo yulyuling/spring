@@ -4,7 +4,7 @@ import lombok.Data; //롬복이가 GET, SET해줌
 
 @Data
 public class Board {
-
+	private String commentCnt;
 	private String boardNo;
 	private String title;
 	private String contents;

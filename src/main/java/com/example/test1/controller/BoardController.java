@@ -113,21 +113,19 @@ public class BoardController {
 		List<Object> list = mapper.readValue(json, new TypeReference<List<Object>>(){});
 		map.put("list", list);
 
-		
-//		resultMap = memberService.getMember(map); 
 		resultMap = boardService.boardRemoveList(map);
 		return new Gson().toJson(resultMap);
 	}
 	//댓글 삭제
-		@RequestMapping(value = "/board/CommentRemove.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-		@ResponseBody
-		public String CommentRemove(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
-			
-			HashMap<String, Object> resultMap = new HashMap<String, Object>();
-			
-			resultMap = boardService.CommentRemove(map);
-			return new Gson().toJson(resultMap); //map을 json형태로 바꿔주는 함수다
-		}
+	@RequestMapping(value = "/board/CommentRemove.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String CommentRemove(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap = boardService.CommentRemove(map);
+		return new Gson().toJson(resultMap); //map을 json형태로 바꿔주는 함수다
+	}
 	//댓글 수정
 	@RequestMapping(value = "/board/CommentEdit.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
@@ -147,5 +145,23 @@ public class BoardController {
 		
 		resultMap = boardService.CommentAdd(map);
 		return new Gson().toJson(resultMap); //map을 json형태로 바꿔주는 함수다
-	}	
+	}
+	@RequestMapping(value = "/board/CommentCount.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String CommentCount(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap = boardService.CommentCount(map);
+		return new Gson().toJson(resultMap); //map을 json형태로 바꿔주는 함수다
+	}
+	@RequestMapping(value = "/board/comment/update.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String commentUpdate(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap = boardService.commentUpdate(map);
+		return new Gson().toJson(resultMap); //map을 json형태로 바꿔주는 함수다
+	}
 }

@@ -37,6 +37,10 @@ public interface BoardMapper {
 	void updateComment(HashMap<String, Object> map);
 
 	void insertComment(HashMap<String, Object> map);
+
+	List<Board> countComment(HashMap<String, Object> map);
+
+	void commentUpdate(HashMap<String, Object> map);
 	
 
 }

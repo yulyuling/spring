@@ -5,9 +5,14 @@
 <mapper namespace="com.example.test1.mapper.BoardMapper">
 	
 	<select id="selectBoardList" parameterType="hashmap" resultType="com.example.test1.model.Board">
-		SELECT *
-		FROM BOARD B
-		INNER JOIN MEMBER M ON B.USERID = M.USERID
+		 SELECT B.*,M.* ,COMMENTCNT
+         FROM BOARD B 
+         LEFT JOIN MEMBER M ON B.USERID = M.USERID
+         LEFT JOIN (
+              SELECT BOARDNO, COUNT(*) AS COMMENTCNT
+              FROM BOARD_COMMENT
+              GROUP BY BOARDNO
+          ) C ON B.BOARDNO = C.BOARDNO
 		WHERE 1=1
 		<if test="searchOption != null and searchOption == 'all'">
 			AND (TITLE LIKE '%' || #{keyword} || '%'
@@ -77,6 +82,7 @@
 			AND USERNAME LIKE '%' || #{keyword} || '%'
 		</if>
 	</select>
+
 	<select id="selectCmtList" parameterType="hashmap" resultType="com.example.test1.model.Comment">
 		SELECT *
         FROM BOARD_COMMENT
@@ -85,20 +91,27 @@
 	
 	<delete id="deleteComment" parameterType="hashmap">
 		DELETE FROM BOARD_COMMENT
-		WHERE COMMENTNO = #{commentno}
+		WHERE COMMENTNO = #{commentNo}
 	</delete>
 	
 	<update id="updateComment" parameterType="hashmap">
 		UPDATE BOARD_COMMENT
     	SET
         CONTENTS = #{contents}
-		WHERE BOARDNO = #{boardNo}
+		WHERE COMMENTNO = #{commentNo}
 	</update>	
 	
 	<insert id="insertComment" parameterType="hashmap">
-		INSERT INTO BOARD_COMMENT(COMMENTNO, BOARDNO, USERID, CONTENTS, P_COMMENTNO, CDATETIME, UDATETIME)
-		VALUES(COMMENT_SEQ.NEXTVAL, #{commentNo}, #{boardNo}, #{userId}, #{contents}, #{pCommentNo}, SYSDATE, SYSDATE)
+		INSERT INTO BOARD_COMMENT (COMMENTNO, BOARDNO, USERID, CONTENTS, CDATETIME)
+		VALUES(COMMENT_SEQ.NEXTVAL, #{boardNo}, #{userId}, #{contents}, SYSDATE)
 	</insert>
+	
+	<update id="commentUpdate" parameterType="hashmap">
+		UPDATE BOARD_COMMENT
+    	SET
+        CONTENTS = #{contents}
+		WHERE COMMENTNO = #{commentNo}
+	</update>
 </mapper>
 
 

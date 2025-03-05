@@ -54,7 +54,7 @@
                     <td>{{item.boardNo}}</td>
                     <td>
                         <a href="javascript:;" @click="fnView(item.boardNo)">{{item.title}}</a>
-                        <span class="textStyle" v-if="item.commentcnt !=0">({{item.commentcnt}})</span>
+                        <span class="textStyle" v-if="item.commentCnt != null">({{item.commentCnt}})</span>
                     </td>
                     <td>
                         <a v-if="sessionStatus == 'A'" href="javascript:;" @click="fnGetUser(item.userId)">{{item.userName}}</a>
@@ -95,7 +95,7 @@
                 orderType: "",
                 index : 0,
                 pageSize : 5,
-                page : 1
+                page : 1,
             };
         },
         methods: {
@@ -109,7 +109,7 @@
                     orderType : self.orderType,
                     searchOption : self.searchOption,
                     pageSize : self.pageSize,
-                    page : (self.page - 1) *self.pageSize
+                    page : (self.page - 1) *self.pageSize,
                 };
 				$.ajax({
 					url:"/board/list.dox",
@@ -198,10 +198,6 @@
                 }
                 self.fnBoardList();
             },
-            fncomment : function(){
-                let self = this;
-
-            }
         },
         mounted() {
             var self = this;

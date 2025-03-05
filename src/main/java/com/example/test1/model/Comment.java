@@ -12,4 +12,5 @@ public class Comment {
 	private String pCommentNo;	
 	private String cDateTime;
 	private String uDateTime;
+	private String commentCnt;
 }

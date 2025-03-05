@@ -92,6 +92,7 @@ public class BoardService {
 		boardMapper.deleteBoardList(map);
 		return null;
 	}
+	
 
 	public HashMap<String, Object> CommentRemove(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
@@ -109,6 +110,25 @@ public class BoardService {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		boardMapper.insertComment(map);
+
+		resultMap.put("result", "success");
+		return null;
+	}
+
+	public HashMap<String, Object> CommentCount(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		List<Board> count = boardMapper.countComment(map);
+		
+		resultMap.put("count", count);
+		resultMap.put("result","success");
+		return resultMap;
+	}
+
+	public HashMap<String, Object> commentUpdate(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		boardMapper.commentUpdate(map);
 
 		resultMap.put("result", "success");
 		return null;
