@@ -20,20 +20,27 @@
 	<div id="app">
 		<table>
 			<tr>
+				<th><input type="checkbox" @click="fnAllCheck"></th>
 				<th>ID</th>
 				<th>이름</th>
 				<th>주소</th>	
 				<th>삭제</th>		
 			</tr>
 			<tr v-for="item in list">
+				<td><input type="checkbox" :value="item.userId" v-model="selectList"></td>
 				<td>{{item.userId}}</td>
-				<td>{{item.userName}}</td>
+				<td> 
+					<a @click="fnUserView" v-if="sessionIdStatus == 'A'">{{item.userName}}</a>
+				</td>
 				<td>{{item.address}}</td>
 				<td>
 					<button @click="fnRemove(item.userId)">삭제</button>
 				</td>
 			</tr>
 		</table>
+		<div>
+			<button @click="fnRemoveList">삭제</button>
+		</div>
 	</div>
 </body>
 </html>
@@ -43,6 +50,10 @@
             return {
                 list: [],
 				userId : "",
+				sessionId : "${sessionId}",
+                sessionIdStatus : "${sessionStatus}",
+				selectList : [],
+				checked : false,
             };
         },
         methods: {
@@ -79,6 +90,49 @@
 					}
 				});
         	},
+			fnUserView (sessionIdStatus){
+				let self = this;
+				var nparmap = {};
+				$.ajax({
+					url:"/member/list.dox",
+					dataType:"json",	
+					type : "POST", 
+					data : nparmap,
+					success : function(data) { 
+						console.log(data); //테이블 만들기
+						self.list = data.list;
+						
+					}
+				});
+            },
+			fnRemoveList : function (){
+                let self = this;
+                var nparmap = {
+                    selectList : JSON.stringify(self.selectList)
+                };
+                $.ajax({
+					url:"/member/remove-list.dox",
+					dataType:"json",	
+					type : "POST", 
+					data : nparmap,
+					success : function(data) { 
+						console.log(data);
+						alert("삭제되었습니다!");
+					}
+				});
+            },
+			fnAllCheck : function (){
+                let self = this;
+                self.checked = !self.checked;
+                if(self.checked){
+                    for(let i=0; i<self.list.length; i++){
+                        self.selectList.push(self.list[i].userId);
+                    }
+                } else {
+                    self.selectList = [];
+                }
+                
+            }
 			
 		},
         mounted() {

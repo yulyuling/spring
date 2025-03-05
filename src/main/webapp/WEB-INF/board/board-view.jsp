@@ -20,17 +20,49 @@
 	<div id="app">
         <table>
             <div>
-                <tr>
-                    <td>제목 : {{info.title}}</td>
-                    <td>내용 : {{info.contents}}</td>
-                    <td>조회수 : {{info.cnt}}</td>
-                </tr>
+                <div>
+                    제목 : {{info.title}}
+                </div>
+                <div>
+                    내용 :<div v-html="info.contents"></div>
+                </div>
+                <div>
+                    조회수 : {{info.cnt}}
+                </div>
             </div>
         </table>
         <div v-if="sessionId == info.userId || sessionIdStatus == 'A'">
             <button @click="fnEdit()">수정</button>
             <button @click="fnRemove()" >삭제</button>
         </div>
+        <table>
+            <tr>
+                <th>작성자</th>
+                <td style="width: 400px">내용</td>
+            </tr>
+        </table>
+            <tr>
+                <div v-for="item in cmtList">
+                    {{item.userId}} : {{item.contents}}
+                </div>
+            </tr>
+            <template v-if="sessionId == info.userId || sessionIdStatus == 'A'">
+                <button @click="fnCommentEdit()">🕳</button>
+                <button @click="fnCommentRemove()" >❌</button>
+            </template>
+            <table>
+                <tr>
+                    <th> 댓글 입력 : </th>
+                    <td>
+                        <textarea 
+                        style="width: 430px"
+                        v-model="comment" cols="60" rows="5"></textarea>
+                    </td>
+                    <td style="width: 50px">
+                        <button @click="fnCommentSave">저장</button>
+                    </td>
+                </tr>
+            </table>
             <button @click="fnBack()">뒤로가기</button>
     </div>
 </body>
@@ -43,6 +75,9 @@
                 info : {}, //단일객체라 맵으로 넘어올거다. 그래서 맵 선언
                 sessionId : "${sessionId}",
                 sessionIdStatus : "${sessionStatus}",
+                cmtList : [],
+                comment: "",
+                userId: {},
             };
         },
         methods: {
@@ -51,6 +86,7 @@
 				var nparmap = {
                     boardNo : self.boardNo,
                     option : "View",
+                    cmtList : self.cmtList,
                 };
 				$.ajax({
 					url:"/board/info.dox",
@@ -60,6 +96,7 @@
 					success : function(data) { 
 						console.log(data);
                         self.info = data.info;
+                        self.cmtList = data.cmtList;
 					}
 				});
             },
@@ -84,6 +121,60 @@
                         self.info = data.info;
                         location.href="/board/list.do";
                         alert("삭제되었습니다!");
+					}
+				});
+            },
+            fnCommentEdit (){
+                let self = this;
+                var nparmap = {
+                    boardNo : self.boardNo,
+                };
+				$.ajax({
+					url:"/board/CommentEdit.dox",
+					dataType:"json",
+					type : "POST", 
+					data : nparmap,
+					success : function(data) { 
+						console.log(data);
+                        self.info = data.info;
+                        location.href="/board/list.do";
+                        alert("삭제되었습니다!");
+					}
+				});
+            },
+            fnCommentRemove (){
+                let self = this;
+                var nparmap = {
+                    boardNo : self.boardNo,
+                };
+				$.ajax({
+					url:"/board/CommentRemove.dox",
+					dataType:"json",
+					type : "POST", 
+					data : nparmap,
+					success : function(data) { 
+						console.log(data);
+                        self.info = data.info;
+                        location.href="/board/list.do";
+                        alert("삭제되었습니다!");
+					}
+				});
+            },
+            fnCommentSave (){
+                let self = this;
+                var nparmap = {
+                    boardNo : self.boardNo,
+                };
+				$.ajax({
+					url:"/board/CommentAdd.dox",
+					dataType:"json",
+					type : "POST", 
+					data : nparmap,
+					success : function(data) { 
+						console.log(data);
+                        self.info = data.info;
+                        location.href="/board/list.do";
+                        alert("등록되었습니다!");
 					}
 				});
             }

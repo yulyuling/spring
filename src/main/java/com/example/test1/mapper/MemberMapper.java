@@ -20,6 +20,10 @@ public interface MemberMapper {
 
 	void memberDelete(HashMap<String, Object> map);
 
+	Member selectMember(HashMap<String, Object> map);
+
+	void memberDeleteList(HashMap<String, Object> map);
+
 
 
 	

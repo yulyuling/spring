@@ -30,4 +30,12 @@
 		DELETE FROM MEMBER
 		WHERE USERID = #{userId}  
 	</delete>
+	<delete id="memberDeleteList" parameterType="hashmap">
+		DELETE FROM MEMBER
+		WHERE USERID IN 
+		<foreach collection ="list" item="item" index="index" open="(" close=")" separator=",">
+						<!-- op en="(" close=")" 이걸 써도 되는데 걍 ( ) 해도 된다-->
+			#{item}	
+		</foreach>
+	</delete>
 </mapper>

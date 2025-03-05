@@ -19,10 +19,28 @@
 		<div>주소: <input v-model="user.address">
             <button @click="fnSearchAddr">주소 검색</button>
         </div>
-		<input type="radio" name="user.status" value="C" v-model="user.status">일반
-        <input type="radio" name="user.status" value="A" v-model="user.status">관리자
-        <button @click="fnAdd()">저장</button>
-	</div>
+        <div>
+            <input v-model="user.phoneNum" placeholder="번호 입력">
+            <button @click="fnSmsAuth">문자인증</button>
+        </div>
+        <div v-if="authFlg">
+            <div v-if="joinFlg" style="color: red;">
+                문자 인증 완료
+            </div>
+            <div v-else>
+                <input v-model="authInputNum" :placeholder="timer">
+                <button @click="fnNumAuth">인증</button>
+            </div>
+        </div>
+        
+		<div>
+            <input type="radio" name="user.status" value="C" v-model="user.status">일반
+            <input type="radio" name="user.status" value="A" v-model="user.status">관리자
+        </div>
+        <div>
+            <button @click="fnAdd()">가입</button>
+        </div>
+    </div>
 </body>
 </html>
 <script>
@@ -39,21 +57,32 @@
                     password : "",
                     userName : "",
                     address : "",
-                    status : "",
-                }
-                
+                    status : "C",
+                    phoneNum : "",
+                    
+                },
+                authNum : "", //서버에서 만든 랜덤 숫자
+                authInputNum : "", //사용자가 받고 입력하는 숫자
+                authFlg : false, // 문자 인증 인증 번호 입력 상태
+                joinFlg : false, // 문자 인증 완료 상태
+                timer : "",
+                count : 180
             };
         },
         methods: {
             fnAdd(){
 				var self = this;
 				var nparmap = {
-                    userId : self.userId,
-                    password : self.password,
-                    userName : self.userName,
-                    address : self.address,
-                    status : self.status
+                    // userId : self.user.userId,
+                    // password : self.user.password,
+                    // userName : self.user.userName,
+                    // address : self.user.address,
+                    // status : self.user.status
                 };
+                if(self.joinFlg == false){
+                    alert("문자 인증 하세요");
+                    return;
+                }
 				$.ajax({
 					url:"/member/add.dox",
 					dataType:"json",	
@@ -87,7 +116,6 @@
                         } else {
                             alert("사용불가");
                         }
-                        location.href="/member/list.do";
 					}
 				});
             },
@@ -103,6 +131,52 @@
                 console.log(roadAddrPart1);
                 console.log(addrDetail);
                 console.log(engAddr);
+            },
+            fnSmsAuth : function (){
+                let self = this;
+                var nparmap = {
+                    phoneNum : self.user.phoneNum
+                };
+                $.ajax({
+					url:"/send-one",
+					dataType:"json",	
+					type : "POST", 
+					data : nparmap,
+					success : function(data) { 
+						console.log(data);
+                        if(data.response.statusCode == 2000){
+                            alert("문자 발송 완료ㅎㅎ");
+                            self.authNum = data.ranStr;
+                            self.authFlg = true;
+                            setInterval(self.fnTimer, 1000);
+                        } else {
+                            alert("잠시 후 다시 시도해주세요")
+                        }
+					}
+				});
+            },
+            fnNumAuth : function (){
+                let self = this;
+                if(self.authNum == self.authInputNum){
+                    alert("인증되었습니다");
+                    self.joinFlg = true;
+                } else {
+                    alert("안 돼, 돌아가");
+                    
+                }
+            },
+            fnTimer (){
+                let self = this;
+                let min = "";
+                let sec = "";
+                min = parseInt(self.count / 60);
+                sec = parseInt(self.count % 60);
+
+                min = min < 10 ? "0" + min : min;
+                sec = sec < 10 ? "0" + sec : sec;
+
+                self.timer = min + ":" + sec;
+                self.count--;
             }
         },
         mounted() {

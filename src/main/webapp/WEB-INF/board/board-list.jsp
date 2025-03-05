@@ -15,6 +15,10 @@
 	    border-collapse: collapse;
 	    padding : 5px;
 	}
+    .textStyle{
+            font-weight: bold;
+            color : red;
+        }
 </style>
 <body>
 	<div id="app">
@@ -28,8 +32,17 @@
                 <input v-model="keyword" @keyup.enter="fnBoardList" placeholder="검색어">
                 <button @click="fnBoardList">검색</button>
             </div>
-            <table v-model="">
+            <div>
+                <select @change="fnBoardList" v-model="pageSize">
+                    <option value="5">5개씩</option>
+                    <option value="10">10개씩</option>
+                    <option value="15">15개씩</option>
+                    <option value="20">20개씩</option>
+                </select>
+            </div>
+            <table>
                 <tr>
+                    <th><input type="checkbox" @click="fnAllCheck"></th>
                     <th>번호</th>
                     <th>제목</th>
                     <th>작성자</th>
@@ -37,15 +50,34 @@
                     <th>작성일</th>
                 </tr>
                 <tr v-for="item in list">
+                    <td><input type="checkbox" :value="item.boardNo" v-model="selectList"></td>
                     <td>{{item.boardNo}}</td>
-                    <td><a href="javascript:;" @click="fnView(item.boardNo)">{{item.title}}</a></td>
-                    <td>{{item.userName}}</td>
+                    <td>
+                        <a href="javascript:;" @click="fnView(item.boardNo)">{{item.title}}</a>
+                        <span class="textStyle" v-if="item.commentcnt !=0">({{item.commentcnt}})</span>
+                    </td>
+                    <td>
+                        <a v-if="sessionStatus == 'A'" href="javascript:;" @click="fnGetUser(item.userId)">{{item.userName}}</a>
+                        <a v-else>{{item.userName}}</a>
+                    </td>
                     <td>{{item.cnt}}</td>
                     <td>{{item.cDateTime}}</td>
                 </tr>
             </table>
         </div>
+        <div>
+            <a href="javacript:;" @click="fnPageMove('prev')" v-if="page != 1"> < </a>
+            <a id="index" href="javacript:;" v-for="num in index" @click="fnPage(num)">
+                <span v-if="page == num" id="pageText">{{num}}</span>
+                <span v-else class="color-black">{{num}}</span>
+            </a>
+            <a href="javacript:;" @click="fnPageMove('next')"  v-if="page != index">> </a> 
+            <!-- 파라미터로 다음,이전을 구분해놨음 next / prev -->
+        </div>
+        <div>
             <button @click="fnAdd"> 글쓰기</button>
+            <button @click="fnRemove">삭제</button>
+        </div>
 	</div>
 </body>
 </html>
@@ -54,11 +86,16 @@
         data() {
             return {
                 list : [],
-                userId:"",
-                userName: "",
                 keyword: "",
                 searchOption: "all",
-            
+                sessionStatus : "${sessionStatus}",
+                selectList : [],
+                checked : false,
+                orderKey: "",
+                orderType: "",
+                index : 0,
+                pageSize : 5,
+                page : 1
             };
         },
         methods: {
@@ -67,7 +104,12 @@
 				var nparmap = {
                     userId : self.userId,
                     keyword : self.keyword,
-                    searchOption : self.searchOption
+                    kind: self.kind,
+                    orderKey : self.orderKey,
+                    orderType : self.orderType,
+                    searchOption : self.searchOption,
+                    pageSize : self.pageSize,
+                    page : (self.page - 1) *self.pageSize
                 };
 				$.ajax({
 					url:"/board/list.dox",
@@ -77,7 +119,7 @@
 					success : function(data) { 
 						console.log(data);
                         self.list = data.list;
-
+                        self.index = Math.ceil(data.count / 5);
 					}
 				});
             },
@@ -89,6 +131,76 @@
             fnView : function (boardNo){
                 //주소를 숨겨서 보내고싶을때
                 pageChange("/board/view.do", {boardNo : boardNo});
+            },
+            fnGetUser : function(userId){
+                var self = this;
+				var nparmap = {
+                    userId : userId
+                };
+				$.ajax({
+					url:"/member/get.dox",
+					dataType:"json",	
+					type : "POST", 
+					data : nparmap,
+					success : function(data) { 
+						console.log(data);
+					}
+				});
+            },
+            fnRemove : function (){
+                let self = this;
+                var nparmap = {
+                    selectList : JSON.stringify(self.selectList)
+                };
+                $.ajax({
+					url:"/board/remove-list.dox",
+					dataType:"json",	
+					type : "POST", 
+					data : nparmap,
+					success : function(data) { 
+						console.log(data);
+ 
+					}
+				});
+            },
+            fnAllCheck : function (){
+                let self = this;
+                self.checked = !self.checked;
+                if(self.checked){
+                    for(let i=0; i<self.list.length; i++){
+                        self.selectList.push(self.list[i].boardNo);
+                    }
+                } else {
+                    self.selectList = [];
+                }
+                
+            },
+            fnOrder : function(orderKey){
+                let self = this;
+                if(self.orderKey != orderKey){
+                    self.orderType = "";
+                }
+                self.orderKey = orderKey;
+                self.orderType = self.orderType == "ASC" ? "DESC" : "ASC";
+                self.fnList();
+            },
+            fnPage : function(num){
+                let self = this;
+                self.page = num;
+                self.fnBoardList();
+            },
+            fnPageMove : function(direction){
+                let self = this;
+                if(direction == "next"){
+                    self.page++;
+                } else {
+                    self.page--;
+                }
+                self.fnBoardList();
+            },
+            fncomment : function(){
+                let self = this;
+
             }
         },
         mounted() {

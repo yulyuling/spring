@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.test1.mapper.BoardMapper;
 import com.example.test1.model.Board;
+import com.example.test1.model.Comment;
 
 @Service
 public class BoardService {
@@ -21,11 +22,17 @@ public class BoardService {
 	//remove, delete
 	//헷갈리니까 이렇게 나눠서 구분함.
 	
+	
+	//게시글 목록 가져온다
 	public HashMap<String, Object> getBoardList(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			List<Board> list = boardMapper.selectBoardList(map);
+			int count = boardMapper.selectBoardCnt(map);
+			
+			System.out.println(count);
+			resultMap.put("count", count);
 			resultMap.put("list", list);
 			resultMap.put("result","success");
 		}catch(Exception e) {
@@ -54,9 +61,10 @@ public class BoardService {
 										//위에처럼하면 너무 코드가 길어짐
 			boardMapper.updateCnt(map);
 		}
-		
 		Board info = boardMapper.selectBoard(map);
+		List<Comment> cmtList = boardMapper.selectCmtList(map);
 		
+		resultMap.put("cmtList", cmtList);
 		resultMap.put("info", info);
 		resultMap.put("result", "success");
 		return resultMap;
@@ -77,6 +85,33 @@ public class BoardService {
 		boardMapper.deleteBoard(map);
 		resultMap.put("result", "success");
 		return resultMap;
+	}
+
+	public HashMap<String, Object> boardRemoveList(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		boardMapper.deleteBoardList(map);
+		return null;
+	}
+
+	public HashMap<String, Object> CommentRemove(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		boardMapper.deleteComment(map);
+		return null;
+	}
+
+	public HashMap<String, Object> CommentEdit(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		boardMapper.updateComment(map);
+		return null;
+	}
+
+	public HashMap<String, Object> CommentAdd(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		boardMapper.insertComment(map);
+
+		resultMap.put("result", "success");
+		return null;
 	}
 
 }
