@@ -6,6 +6,7 @@
     <!-- Quill CDN -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    
 
 	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -20,11 +21,14 @@
 <body>
 	<div id="app">
         <div> 제목 : <input v-model="title"> </div>
-        <div style="width: 500px;">
-            <div id="editor" style="height: 300px;"></div>
-        </div>
-        <div>
-            <button @click="fnSave()">저장</button>
+            <input type="file" id="file1" name="file1" accept=".jpg, .png" multiple>
+            
+            <div style="width: 500px;">
+                <div id="editor" style="height: 300px;"></div>
+            </div>
+            <div>
+                <button @click="fnSave()">저장</button>
+                <!-- <button @click="fnAdd">파일저장</button> -->
         </div>
 	</div>
 </body>
@@ -53,10 +57,37 @@
 					data : nparmap,
 					success : function(data) { 
 						console.log(data);
-                        alert("저장함!");
-                        location.href="/board/list.do"
+                        alert("저장함!");  
+
+                        //첨부파일이 있을때만 실행한다.
+                        if( $("#file1")[0].files.length > 0){
+                            var form = new FormData();
+                            form.append( "file1",  $("#file1")[0].files[0] );
+                            form.append( "boardNo", data.boardNo); // 임시 pk
+                            self.upload(form); 
+                            location.href="/board/list.do"
+                        } else {
+                            location.href="/board/list.do"
+                        }
+                         //용량이 많으면 업로드 하는 동안 다음으로 넘어가버리니까, else로 해줘야함
+                        //ajax통신은 비동기통신이라 순서대로 실행되지 않을 수도 있따.
 					}
 				});
+            },
+            
+            //파일업로드
+            upload : function(form){
+            	var self = this;
+            	 $.ajax({
+            		 url : "/fileUpload.dox"
+            	   , type : "POST"
+            	   , processData : false
+            	   , contentType : false
+            	   , data : form
+            	   , success:function(response) { 
+                
+            	   }	           
+               });
             }
         },
         mounted() {

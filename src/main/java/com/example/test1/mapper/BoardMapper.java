@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.example.test1.model.Board;
+import com.example.test1.model.BoardFile;
 import com.example.test1.model.Comment;
 
 @Mapper
@@ -42,5 +43,8 @@ public interface BoardMapper {
 
 	void commentUpdate(HashMap<String, Object> map);
 	
+	void insertBoardFile(HashMap<String, Object> map);
+
+	List<BoardFile> selectBoardImg(HashMap<String, Object> map);
 
 }

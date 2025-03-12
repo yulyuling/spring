@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.example.test1.mapper.BoardMapper;
 import com.example.test1.model.Board;
+import com.example.test1.model.BoardFile;
 import com.example.test1.model.Comment;
 
 @Service
-public class BoardService {
+public class BoardService<imgFile> {
 	
 	@Autowired
 	BoardMapper boardMapper;
@@ -47,8 +48,15 @@ public class BoardService {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		boardMapper.insertBoard(map);
+		System.out.println("key ==>" + map.get("boardNo"));
+		resultMap.put("boardNo", map.get("boardNo"));
 		resultMap.put("result", "success");
 		
+		return resultMap;
+	}
+	public HashMap<String, Object> addBoardFile(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		boardMapper.insertBoardFile(map);
 		return null;
 	}
 
@@ -64,6 +72,10 @@ public class BoardService {
 		Board info = boardMapper.selectBoard(map);
 		List<Comment> cmtList = boardMapper.selectCmtList(map);
 		
+
+		List<BoardFile> imgList = boardMapper.selectBoardImg(map);
+		
+		resultMap.put("imgList", imgList);
 		resultMap.put("cmtList", cmtList);
 		resultMap.put("info", info);
 		resultMap.put("result", "success");
@@ -93,7 +105,6 @@ public class BoardService {
 		return null;
 	}
 	
-
 	public HashMap<String, Object> CommentRemove(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		boardMapper.deleteComment(map);
@@ -133,5 +144,6 @@ public class BoardService {
 		resultMap.put("result", "success");
 		return null;
 	}
+
 
 }

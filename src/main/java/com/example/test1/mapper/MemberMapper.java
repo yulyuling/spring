@@ -14,7 +14,7 @@ public interface MemberMapper {
 
 	void insertMember(HashMap<String, Object> map);
 
-	Member checkMember(HashMap<String, Object> map);
+	Member checkMemberId(HashMap<String, Object> map);
 
 	List<Member> getMemberList(HashMap<String, Object> map);
 
@@ -23,6 +23,8 @@ public interface MemberMapper {
 	Member selectMember(HashMap<String, Object> map);
 
 	void memberDeleteList(HashMap<String, Object> map);
+
+	void UpdateMemberPwd(HashMap<String, Object> map);
 
 
 

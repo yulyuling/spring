@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,6 +54,11 @@ public class MemberController {
 
         return "/jusoPopup";
     }
+	@RequestMapping("/member/pwd.do") 
+    public String pwd(Model model) throws Exception{
+
+        return "/member/pwd-search";
+    }
 
 
 	//로그인 화면
@@ -78,6 +82,16 @@ public class MemberController {
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = memberService.memberAdd(map);
+		
+		return new Gson().toJson(resultMap); //map을 json형태로 바꿔주는 함수다
+	}
+	@RequestMapping(value = "/member/addPwd.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String addPwd(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = memberService.memberAddPwd(map);
 		
 		return new Gson().toJson(resultMap); //map을 json형태로 바꿔주는 함수다
 	}
@@ -107,11 +121,11 @@ public class MemberController {
 	//중복체크
 	@RequestMapping(value = "/member/check.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String check(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+	public String memberCheckID(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap = memberService.memberCheck(map);
+		resultMap = memberService.memberCheckID(map);
 		
 		return new Gson().toJson(resultMap); //map을 json형태로 바꿔주는 함수다
 	}
@@ -136,4 +150,5 @@ public class MemberController {
 		resultMap = memberService.memberRemoveList(map);
 		return new Gson().toJson(resultMap); //map을 json형태로 바꿔주는 함수다
 	}
+
 }

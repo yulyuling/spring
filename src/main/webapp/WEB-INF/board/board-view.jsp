@@ -29,7 +29,10 @@
                         제목 : {{info.title}}
                     </div>
                     <div>
-                        내용 :<div v-html="info.contents"></div>
+                        <div v-for="item in imgList">
+                            <img :src="item.filePath">
+                            내용 :<div v-html="info.contents" ></div>
+                        </div>
                     </div>
                     <div>
                         조회수 : {{info.cnt}}
@@ -47,7 +50,7 @@
                 </tr>
             </table>
             <table>
-                <tr>
+                <tr v-if="cmtList.commentNo != null">
                     <div v-for="item in cmtList">
                         <label v-if="editCommentNo == item.commentNo">
                             {{item.userId}}: <input v-model="editContents">
@@ -96,6 +99,7 @@
                     userId: {},
                     editCommentNo: "",
                     editContents: "",
+                    imgList: []
                 };
             },
             methods: {
@@ -115,6 +119,7 @@
                             console.log(data);
                             self.info = data.info;
                             self.cmtList = data.cmtList;
+                            self.imgList = data.imgList;
                         }
                     });
                 },
@@ -167,6 +172,7 @@
                             console.log(data);
                             alert("수정됐습니다!");
                             self.editCommentNo ="";
+                            self.fnGetBoard();
                         }
                     });
                 },

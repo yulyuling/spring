@@ -159,7 +159,7 @@
 					data : nparmap,
 					success : function(data) { 
 						console.log(data);
- 
+                        self.fnBoardList();
 					}
 				});
             },

@@ -15,7 +15,7 @@
 		VALUES(#{userId}, #{password}, #{userName}, #{address}, #{status}, SYSDATE)
 	</insert>
 	
-	<select id="checkMember" parameterType="hashmap" resultType="com.example.test1.model.Member">
+	<select id="checkMemberId" parameterType="hashmap" resultType="com.example.test1.model.Member">
 		SELECT *
 		FROM MEMBER
 		WHERE USERID = #{userId}
@@ -38,4 +38,10 @@
 			#{item}	
 		</foreach>
 	</delete>
+	<update id="UpdateMemberPwd">
+		UPDATE MEMBER 
+		SET
+			PASSWORD = #{password}
+		WHERE MEMBER = #{userId}
+	</update>
 </mapper>

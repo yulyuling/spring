@@ -38,6 +38,10 @@ public class MemberService {
 				session.setAttribute("sessionId", member.getUserId());
 				session.setAttribute("sessionName", member.getUserName());
 				session.setAttribute("sessionStatus", member.getStatus());
+				session.setMaxInactiveInterval(60 * 60 ); // 60*60초
+				
+				//session.invalidate(); 세션 정보 삭제
+//				session.removeAttribute("sessionId"); 1개씩 삭제할때
 				
 				resultMap.put("member", member);
 				resultMap.put("result", "success");
@@ -57,10 +61,10 @@ public class MemberService {
 		return resultMap;
 	}
 
-	public HashMap<String, Object> memberCheck(HashMap<String, Object> map) {
+	public HashMap<String, Object> memberCheckID(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		Member member = memberMapper.checkMember(map);
+		Member member = memberMapper.checkMemberId(map);
 		
 		int count = member != null ? 1 : 0;
 		resultMap.put("count", count);
@@ -106,5 +110,12 @@ public class MemberService {
 		return null;
 	}
 
+	public HashMap<String, Object> memberAddPwd(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		memberMapper.UpdateMemberPwd(map);
+		return resultMap;
+	}
 
 }

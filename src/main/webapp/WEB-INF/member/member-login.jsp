@@ -16,10 +16,14 @@
 			아이디 : <input v-model="userId">  
 		</div>
 		<div>
-			비밀번호 : <input v-model="pwd">  
+			비밀번호 : <input v-model="pwd">
+		</div>
+		<div>
+			<button @click="fnSearchPwd">비밀번호 찾기</button>
 		</div>
 		<button @click="fnLogin">로그인</button>
 		<button @click="fnAdd">회원가입</button>
+
 	</div>
 </body>
 </html>
@@ -56,6 +60,9 @@
             },
 			fnAdd (){
 				location.href="/member/add.do";
+			},
+			fnSearchPwd (){
+				location.href="/member/pwd.do";
 			}
         },
         mounted() {
