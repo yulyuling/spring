@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.test1.mapper.ProductMapper">
+	<select id="selectProductList" parameterType="hashmap" resultType="com.example.test1.model.Product">
+		SELECT * 
+		FROM TBL_PRODUCT P
+		INNER JOIN TBL_PRODUCT_IMG I ON P.ITEM_NO = I.ITEM_NO AND I.THUMBNAIL = 'Y'
+		WHERE ITEM_NAME LIKE '%' || #{keyword} || '%'
+	</select>
+	
+	<select id="selectProduct" parameterType="hashmap" resultType="com.example.test1.model.Product">
+		SELECT * 
+		FROM TBL_PRODUCT P
+		INNER JOIN TBL_PRODUCT_IMG I ON P.ITEM_NO = I.ITEM_NO AND I.THUMBNAIL = 'Y'
+		WHERE P.ITEM_NO = #{itemNo}
+	</select>
+	
+	<select id="selectProductImg" parameterType="hashmap" resultType="com.example.test1.model.Product">
+		SELECT * 
+		FROM TBL_PRODUCT_IMG
+		WHERE ITEM_NO = #{itemNo}
+	</select>
+	
+	<insert id="itemInsertProduct" parameterType="hashmap" useGeneratedKeys="true" keyColumn="ITEM_NO" keyProperty="itemNo">
+		INSERT INTO TBL_PRODUCT
+		VALUES(PRODUCT_SEQ.NEXTVAL, #{itemName}, #{price}, #{itemInfo})
+	</insert>
+
+	<insert id="insertProductFile" parameterType="hashmap">
+		INSERT INTO TBL_PRODUCT_IMG
+		VALUES(#{itemNo}, #{path}, #{filename}, #{thumbnail})
+	</insert>
+
+</mapper>

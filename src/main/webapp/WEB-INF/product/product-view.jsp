@@ -5,7 +5,9 @@
 	<meta charset="UTF-8">
 	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 	<title>첫번째 페이지</title>
+    <script src="/js/page-Change.js"></script>
 </head>
 <style>
     body {
@@ -54,6 +56,7 @@
         background-color: #8000ff;
         color: white;
         border: none;
+        gap: 5px;
         border-radius: 5px;
         font-size: 1.2em;
         cursor: pointer;
@@ -70,45 +73,83 @@
 </style>
 </head>
 <body>
-<div id="app">
     <jsp:include page="../common/header.jsp"/>
-        <div class="container" v-if="selectedItem">
-            <div class="product">
-                <img :src="selectedItem.filePath" alt="제품 이미지">
-                <div class="product-info">
-                    <div class="product-name">{{ selectedItem.itemName }}</div>
-                    <div class="product-price">{{ selectedItem.price }}원</div>
-                    <button class="buy-button" @click="fnBuy">구매하기</button>
-                    <div class="description">{{ selectedItem.itemInfo }}</div>
+    <div id="app">
+    
+        <div class="container">
+            <div class="product-detail">
+                <img :src="info.filePath" :alt="info.itemName">
+                <div class="detail-info">
+                    <h2>{{ info.itemName }}</h2>
+                    <p class="price">{{ info.price }} 원</p>
+                    <p class="description">{{ info.itemInfo }}</p>
+                    <button class="buy-button" @click="fnPayment()">구매하기</button>
+                    <button class="buy-button" @click="goBack">뒤로 가기</button>
                 </div>
             </div>
         </div>
-   
-</div>
+    </div>
+
 </body>
 </html>
+
 <script>
-const app = Vue.createApp({
-    data() {
-        return {
-            list: [
-               
-            ],
-            selectedItem: null
-        };
-    },
-    methods: {
-        fnView(index) {
-            this.selectedItem = this.list[index];
+    const userCode = "imp70038285"; 
+    IMP.init(userCode);
+    const app = Vue.createApp({
+        data() {
+            return {
+                itemNo : "${map.itemNo}",
+                info: {},
+                uid : {merchant_uid: "test1" + new Date().getDate()},
+            };
         },
-        fnBuy() {
-            alert(this.selectedItem.itemName + " 구매 완료!");
+        methods: {
+            fnGetProduct() {
+                var self = this;
+                var params = {
+                    itemNo : self.itemNo
+                };
+
+                $.ajax({
+                    url: "/product/view.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: params,
+                    success: function(data) {
+                        self.info = data.info;
+                        console.log(data);
+                    }
+                });
+            },
+            goBack() {
+                window.history.back();
+            },
+            fnPayment(){
+                let self = this;
+                IMP.request_pay({
+                    pg: "html5_inicis",
+                    pay_method: "card",
+                    merchant_uid: "test1" + new Date().getDate(),
+                    name: "테스트 결제",
+                    amount: 1,
+                    buyer_tel: "010-0000-0000",
+                  } , function (rsp) { // callback
+                      if (rsp.success) {
+                        // 결제 성공 시
+                        alert("성공");
+                        console.log(rsp);
+                      } else {
+                        // 결제 실패 시
+                        alert("실패");
+                      }
+                });
+            }
+        },
+        mounted() {
+            this.fnGetProduct();
         }
-    },
-    mounted() {
-        // 예시로 첫 번째 제품을 기본으로 선택
-        this.selectedItem = this.list[0];
-    }
-});
-app.mount('#app');
+    });
+
+    app.mount('#app');
 </script>

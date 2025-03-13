@@ -3,36 +3,44 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>제품 목록</title>
-	<link rel="stylesheet"href="../css/product-style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="/js/page-Change.js"></script>
+<title>제품 목록</title>
+<link rel="stylesheet"href="../css/product-style.css">
+<style>
+.product-list {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between; /* 요소 간격을 조정 */
+	color: rgb(103, 103, 103);
+}
+
+.product {
+    width: calc(33.33% - 10px); /* 3개씩 배치되도록 설정 (간격 고려) */
+    box-sizing: border-box;
+    margin-bottom: 20px; /* 아래 간격 조정 */
+    text-align: center; /* 텍스트 정렬 */
+	color: rgb(103, 103, 103);
+}
+
+
+</style>
 </head>
 <body>
+	<jsp:include page="../common/header.jsp"/>
 	<div id="app">
-	    <div class="header">
-	        <div class="logo">
-	            <img src="../img/re3.webp">
-	        </div>
-	        <div class="header-title">양파쿵야의 레스토랑</div>
-	        <div class="search-box">
-	            <input type="text" placeholder="검색어를 입력하세요">
-	            <button>검색</button>
-	        </div>
-	    </div>
-	    <h1>🛒 제품 목록</h1>
-	    <div class="product-list">
-			
-	        	<div v-for="item in list" class="product">
-	        	    <img :src="item.filePath" alt="제품1" @click="fnView">
-	        	    <div class="product-name"> {{item.itemName}} </div>
-					<p>{{item.itemInfo}}</p>
-	        	    <div class="product-price">\{{item.price}}원</div>
 
-	        	</div>
-			
+	    <h1 class="font" style="color: #003d80;"> ㅂㅂㅂ</h1>
+	    <div class="product-list">
+	        <div v-for="item in list" class="product">
+	            <img :src="item.filePath" alt="제품1" @click="fnView(item.itemNo)">
+	            <div class="product-name"> {{item.itemName}} </div>
+				<p>{{item.itemInfo}}</p>
+	            <div class="product-price">{{item.price}}원</div>
+	        </div>
 	    </div>
 	</div>
 </body>
@@ -42,12 +50,16 @@
         data() {
             return {
 				list : [],
+				keyword : "",
 			};
         },
         methods: {
-            fnProductList(){
+            fnProductList(keyword){
 				var self = this;
-				var nparmap = {};
+				console.log(keyword);
+				var nparmap = {
+					keyword : keyword,
+				};
 				$.ajax({
 					url:"/product/list.dox",
 					dataType:"json",	
@@ -59,14 +71,14 @@
 					}
 				});
             },
-			fnView(){
-				location.href="/product/view.do"
+			fnView : function(itemNo){
+				pageChange("/product/view.do", {itemNo : itemNo});
 
 			}
         },
         mounted() {
             var self = this;
-			self.fnProductList();
+			self.fnProductList("");
         }
     });
     app.mount('#app');

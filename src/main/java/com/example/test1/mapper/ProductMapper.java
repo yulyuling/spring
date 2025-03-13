@@ -12,9 +12,12 @@ public interface ProductMapper {
 
 	List<Product> selectProductList(HashMap<String, Object> map);
 
-	List<Product> selectProductView(HashMap<String, Object> map);
+	Product selectProduct(HashMap<String, Object> map);
+	
+	List<Product> selectProductImg(HashMap<String, Object> map);
 
+	int itemInsertProduct(HashMap<String, Object> map);
 
-
+	void insertProductFile(HashMap<String, Object> map);
 
 }

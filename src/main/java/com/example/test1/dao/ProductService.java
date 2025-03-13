@@ -15,25 +15,50 @@ public class ProductService {
 	@Autowired
 	ProductMapper productMapper;
 
-	public HashMap<String, Object> productList(HashMap<String, Object> map) {
+	public HashMap<String, Object> getProductList(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		
 		List<Product> list = productMapper.selectProductList(map);
+		resultMap.put("result", "success");
 		resultMap.put("list", list);
 
 		return resultMap;
 	}
 
-	public HashMap<String, Object> productView(HashMap<String, Object> map) {
+	public HashMap<String, Object> getProduct(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		Product info = productMapper.selectProduct(map);
+//		productMapper.selectProductImg(map);
+		resultMap.put("result", "success");
+		resultMap.put("info", info);
+//		resultMap.put("imgList", imgList);
+
+		return resultMap;
+	}
+
+	public HashMap<String, Object> productAddItem(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
-		List<Product> list = productMapper.selectProductView(map);
-		resultMap.put("list", list);
-
+		int num = productMapper.itemInsertProduct(map);
+		if(num > 0) {
+			resultMap.put("itemNo", map.get("itemNo"));
+			resultMap.put("result", "success");
+		} else {
+			resultMap.put("result", "fail");
+		}
 		return resultMap;
 	}
 
-
+	public void addProductFile(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		productMapper.insertProductFile(map);
+		try {
+			productMapper.insertProductFile(map);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
 }

@@ -11,6 +11,8 @@ public class Product {
 	private String fileName;
 	private String filePath;
 	private String itemInfo;
+	private String thumbNail;
+	private String keyword;
 	
 
 }

@@ -62,7 +62,10 @@
                         //첨부파일이 있을때만 실행한다.
                         if( $("#file1")[0].files.length > 0){
                             var form = new FormData();
-                            form.append( "file1",  $("#file1")[0].files[0] );
+                            // form.append( "file1",  $("#file1")[0].files[0] );
+                            for(let i=0; i<$("#file1")[0].files.length; i++){
+                                form.append( "file1",  $("#file1")[0].files[i]);
+                            }
                             form.append( "boardNo", data.boardNo); // 임시 pk
                             self.upload(form); 
                             location.href="/board/list.do"
