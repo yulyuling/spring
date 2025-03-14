@@ -33,7 +33,7 @@
 	<jsp:include page="../common/header.jsp"/>
 	<div id="app">
 
-	    <h1 class="font" style="color: #003d80;"> ㅂㅂㅂ</h1>
+	    <h1 class="font" style="color: #003d80;"> 아이템 팔아요</h1>
 	    <div class="product-list">
 	        <div v-for="item in list" class="product">
 	            <img :src="item.filePath" alt="제품1" @click="fnView(item.itemNo)">
@@ -50,7 +50,6 @@
         data() {
             return {
 				list : [],
-				keyword : "",
 			};
         },
         methods: {

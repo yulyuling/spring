@@ -15,6 +15,7 @@ public class ProductService {
 	@Autowired
 	ProductMapper productMapper;
 
+
 	public HashMap<String, Object> getProductList(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
@@ -29,10 +30,10 @@ public class ProductService {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		Product info = productMapper.selectProduct(map);
-//		productMapper.selectProductImg(map);
+		List<Product> imgList = productMapper.selectProductImg(map);
 		resultMap.put("result", "success");
 		resultMap.put("info", info);
-//		resultMap.put("imgList", imgList);
+		resultMap.put("imgList", imgList);
 
 		return resultMap;
 	}
@@ -53,12 +54,12 @@ public class ProductService {
 
 	public void addProductFile(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
-		productMapper.insertProductFile(map);
 		try {
 			productMapper.insertProductFile(map);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 	}
+
 	
 }

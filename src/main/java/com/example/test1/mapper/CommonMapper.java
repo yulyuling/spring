@@ -11,4 +11,6 @@ public interface CommonMapper {
 
 	List<Menu> selectMenuList(HashMap<String, Object> map);
 
+	void insertPayment(HashMap<String, Object> map);
+
 }

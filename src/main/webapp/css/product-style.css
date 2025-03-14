@@ -1,117 +1,289 @@
+/* 기본 설정 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f8f8;
+    text-align: center;
+}
 
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f8f8f8;
-        text-align: center;
-    }
-    h1{
-        text-align: center;
-    }
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: white;
-        padding: 10px 20px;
-        height: 100px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        position: relative;
-    }
-    .logo img {
-        height: 80px;
-    }
-    .header-title {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 1.5em;
-        font-weight: bold;
-        color: #333;
-    }
-    .search-box {
-        display: flex;
-        align-items: center;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 5px;
-        background: white;
-    }
-    .search-box input {
-        border: none;
-        outline: none;
-        padding: 5px;
-        font-size: 1em;
-    }
-    .search-box button {
-        background-color: rgb(128, 128, 255);
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-    .search-box button:hover {
-        background-color: rgb(128, 128, 255);
-    }
-    .product-list {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        padding: 20px;
-        overflow-x: auto;
-        white-space: nowrap;
-        
-    }
-    .product {
-        background: white;
-        padding: 15px;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        cursor: pointer;
-        min-width: 250px;
-    }
-    .product:hover {
-        transform: scale(1.08);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    }
-    .product img {
-        width: 250px;
-        height: 250px;
-        object-fit: cover;
-        border-radius: 10px;
-        transition: transform 0.3s ease;
-    }
+/* 헤더 스타일 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 10px 20px;
+    height: 100px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
 
-    .product-name {
-        font-size: 1.4em;
-        font-weight: bold;
-        /* margin: 10px 0; */
-        color: #2e59a4;
-        width: 100%;
+/* 로고 스타일 */
+.logo img {
+    height: 80px;
+    max-width: 100%;
+    object-fit: contain;
+}
 
-    }
-    .product-price {
-        font-size: 1.2em;
-        color: rgb(0, 0, 0);
-        font-weight: bold;
-    }
-    .buy-button {
-        display: inline-block;
-        margin-top: 10px;
-        padding: 10px 20px;
-        background-color: rgb(128, 128, 255);
-        color: white;
-        border: none;
-        border-radius: 5px;
-        font-size: 1em;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-    .buy-button:hover {
-        background-color: rgb(192, 192, 192);
-    }
+.logo-text {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* 제목 중앙 정렬 */
+.header-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+    flex-grow: 1;
+    text-align: center;
+}
+
+/* 검색창 스타일 */
+.search-container {
+    position: relative;
+    width: 280px;
+    display: flex;
+    align-items: center;
+    border: 2px solid #0056b3;
+    border-radius: 50px;
+    padding: 5px 10px;
+    background-color: white;
+    gap: 10px; /* 검색창과 로그인 버튼 사이 간격 */
+}
+
+.search-input {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    padding: 8px;
+    background: transparent;
+}
+
+.search-btn {
+    border: none;
+    background-color: #0056b3;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 80px;
+}
+
+.search-btn:hover {
+    background-color: #003d80;
+}
+
+/* 로그인 버튼 스타일 */
+.login-btn button {
+    background-color: #0056b3;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.login-btn button:hover {
+    background-color: #466789;
+}
+
+/* 네비게이션 스타일 */
+.nav {
+    display: flex;
+    justify-content: center;
+    background-color: #ffffff;
+    padding: 10px 0;
+    text-decoration: none;
+    color: #333;
+}
+
+.nav > li {
+    list-style: none;
+    position: relative;
+    margin: 0 20px;
+    cursor: pointer;
+}
+
+.nav > li > a {
+    display: block;
+    padding: 10px 15px;
+    color: rgb(157, 157, 157);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* 드롭다운 메뉴 스타일 */
+.nav li ul {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    background-color: white;
+    padding: 0;
+    min-width: 120px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    z-index: 1000;
+    display: none;
+}
+
+.nav li:hover ul,
+.nav li ul.show {
+    display: block;
+}
+
+.nav li ul li {
+    list-style: none;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    text-align: center;
+}
+
+.nav li ul li:last-child {
+    border-bottom: none;
+}
+
+.nav li ul li:hover {
+    background-color: #f0f0f0;
+}
+
+/* 상품 리스트 스타일 */
+.product-list {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.product {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    min-width: 250px;
+}
+
+.product:hover {
+    transform: scale(1.08);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.product img {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+/* 상품 텍스트 스타일 */
+.product-name {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #2e59a4;
+    width: 100%;
+}
+
+.product-price {
+    font-size: 1.2em;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+}
+
+/* 구매 버튼 스타일 */
+.buy-button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: rgb(128, 128, 255);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.buy-button:hover {
+    background-color: rgb(192, 192, 192);
+}
+
+/* 로그인 화면 스타일 */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 120px); /* 헤더 높이를 제외한 화면 중앙 */
+    margin-top: 20px;
+}
+
+/* 로그인 폼 */
+.login-form {
+    width: 350px;
+    padding: 30px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* 입력 필드 */
+.input-field {
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+/* 로그인 버튼 스타일 */
+.login-button, .signup-button, .find-password-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+.login-button:hover, .signup-button:hover, .find-password-button:hover {
+    background-color: #003d80;
+}
+
+/* 링크 스타일 */
+a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+.ulText {
+    font-size: 15px;
+}

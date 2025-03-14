@@ -15,66 +15,6 @@
         background-color: #f8f8f8;
     }
 
-    /* 헤더 스타일 */
-    #header {
-        width: 100%;
-    }
-
-    .header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background: white;
-        padding: 10px 20px;
-        height: 80px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .logo img {
-        height: 60px;
-    }
-
-    .header-title {
-        flex-grow: 1;
-        text-align: center;
-        font-size: 1.5em;
-        font-weight: bold;
-        color: #333;
-    }
-
-    .header-right {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .search-box {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-    }
-
-    .search-box input {
-        padding: 6px;
-        font-size: 14px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        width: 180px;
-    }
-
-    .search-box button, .login-btn button {
-        padding: 6px 12px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    .search-box button:hover, .login-btn button:hover {
-        background-color: #0056b3;
-    }
-
     /* 제품 등록 폼 */
     #app {
         width: 400px;
@@ -125,9 +65,9 @@
     }
 </style>
 <body>
-    <div id="header">
+
         <jsp:include page="../common/header.jsp"/>
-    </div>
+
     <div id="app">
 
         <h2>제품 등록</h2>
@@ -177,20 +117,19 @@
 					success : function(data) { 
 						console.log("상품 등록 성공", data);
 
-                        if( $("#file1")[0].files.length > 0){
-                            var form = new FormData();
+                        if(data.result == "success"){
+                            if( $("#file1")[0].files.length > 0 && $("#thumbFile")[0].files.length > 0){
+                                var form = new FormData();
+                                // var list = [];
+                                form.append( "file1",  $("#thumbFile")[0].files[0]);
+                                for(let i=0; i<$("#file1")[0].files.length; i++){
+                                    form.append( "file1",  $("#file1")[0].files[i]);
 
-                            form.delete("file1");
-                            for(let i=0; i<$("#file1")[0].files.length; i++){
-                                form.append( "file1",  $("#file1")[0].files[i]);
+                                }
+                                form.append( "itemNo", data.itemNo); // 임시 pk
+                               self.upload(form); 
                             }
-                            form.append( "itemNo", data.itemNo); // 임시 pk
-                            self.upload(form); 
-                    
-                        }  else {
-                            // location.href="/product/add.do"
                         }
-
 					}
 				});
             },

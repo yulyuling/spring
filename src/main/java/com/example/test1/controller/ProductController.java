@@ -41,7 +41,7 @@ public class ProductController {
 		
 		return "/product/product-add"; 
     }
-	
+
 	@RequestMapping(value = "/product/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String list(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
@@ -68,10 +68,10 @@ public class ProductController {
 		resultMap = productService.getProduct(map);
 		return new Gson().toJson(resultMap);
 	}
+
 	@RequestMapping("/product/fileUpload.dox")
 	public String result(@RequestParam("file1") List<MultipartFile> files, @RequestParam("itemNo") int itemNo, HttpServletRequest request,HttpServletResponse response, Model model)
 	{
-		
 		
 		String url = null;
 		String path="c:\\img";
@@ -116,6 +116,7 @@ public class ProductController {
 					
 					}
 			}
+			return "redirect:/product/list.do";
 		}catch(Exception e) {
 			System.out.println(e);
 		}
